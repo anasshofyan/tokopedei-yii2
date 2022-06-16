@@ -30,7 +30,7 @@ class Item extends \yii\db\ActiveRecord
     {
         return [
             [['price', 'category_id'], 'integer'],
-            [['image'], 'string'],
+            [['image'], 'file', 'skipOnEmpty' => TRUE, 'extensions' => 'jpg, png'],
             [['name'], 'string', 'max' => 100],
         ];
     }
