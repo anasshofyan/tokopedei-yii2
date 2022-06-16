@@ -31,7 +31,13 @@ $this->params['breadcrumbs'][] = $this->title;
             'id',
             'name',
             'price',
-            'image:ntext',
+            [
+            'label'=>'Image',
+            'format'=>'raw',
+            'value' => function($data){
+                return Html::img($data->image,['alt'=>$data->image]); 
+            }
+            ],
             'category_id',
             [
                 'class' => ActionColumn::className(),
