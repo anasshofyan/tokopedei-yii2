@@ -8,6 +8,7 @@ use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use \Yii as Yii;
+use yii\web\UploadedFile;
 
 /**
  * ItemController implements the CRUD actions for Item model.
@@ -70,13 +71,29 @@ class ItemController extends Controller
     {
         $model = new Item();
 
-        if ($this->request->isPost) {
-            if ($model->load($this->request->post()) && $model->save()) {
-                return $this->redirect(['view', 'id' => $model->id]);
+        if ($model->load(Yii::$app->request->post())) {
+            $image = UploadedFile::getInstance($model, 'image');
+
+            if ($model->validate()) {
+                $model->save();
+                if(!empty($image)) {
+                    $image_name = 'image' . $model->name;
+                    $image->saveAs(Yii::getAlias('@backend/web/img') . $image_name . $image->extension);
+                    $model->image = $image_name . $image->extension;
+                    $model->save(FALSE);
+                }
             }
-        } else {
-            $model->loadDefaultValues();
+            $model->save();
+            return $this->redirect(['view', 'id' => $model->id]);
         }
+
+        // if ($this->request->isPost) {
+        //     if ($model->load($this->request->post()) && $model->save()) {
+        //         return $this->redirect(['view', 'id' => $model->id]);
+        //     }
+        // } else {
+        //     $model->loadDefaultValues();
+        // }
 
         return $this->render('create', [
             'model' => $model,
