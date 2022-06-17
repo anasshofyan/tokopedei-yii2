@@ -35,8 +35,13 @@ $this->params['breadcrumbs'][] = $this->title;
                     <?= Html::img($row->image,['alt'=>$row->image]) ?>
                     <h2><?= $row->name ?></h2>
                     <h3>Rp. <?= number_format($row->price, 2) ?></h3>
-                    <?= Html::a('Beli', ['add-to-cart', 'id' => $row->id], ['class' => 'btn btn-success'])?>
-                    <?= Html::a('Detail', ['view', 'id' => $row->id], ['class' => 'btn btn-info'])?>
+                    <?php if (!Yii::$app->user->isGuest): ?>
+                        <?= Html::a('Beli', ['add-to-cart', 'id' => $row->id], ['class' => 'btn btn-success'])?>
+                        <?= Html::a('Detail', ['view', 'id' => $row->id], ['class' => 'btn btn-info'])?>
+                    <?php else: ?>
+                        <small style="color: red;">Login terlebih dahulu sebelum membeli.</small>
+                    <?php endif; ?>
+
                 </div>
             </div>
         </div>

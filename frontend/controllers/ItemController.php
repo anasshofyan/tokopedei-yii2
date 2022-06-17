@@ -44,6 +44,7 @@ class ItemController extends Controller
         if (isset($_POST['category']) && !empty($_POST['category']) && $_POST['category'] != 0) {
             $query->andWhere(['=', 'category_id', $_POST['category']]);
         }
+        
         $count = $query->count();
         $pagination = new Pagination(['totalCount' => $count, 'pageSize' => 2]);
         $model = $query->offset($pagination->offset)->limit($pagination->limit)->all();
